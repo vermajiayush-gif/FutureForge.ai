@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import Particles from './components/Particles';
 import WelcomePage from './pages/WelcomePage';
 import CareerGoalsPage from './pages/CareerGoalsPage';
@@ -11,10 +11,10 @@ import DayPage from './pages/DayPage';
 import CertificatePage from './pages/CertificatePage';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
-
 function AppContent() {
-  const isAdminRoute = window.location.pathname.startsWith('/admin');
-
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+  const courseUnlocked = localStorage.getItem('courseUnlocked') === 'true';
   return (
     <div className="relative min-h-screen bg-[#050a14] text-white overflow-x-hidden">
       {/* Background layers */}
@@ -22,13 +22,12 @@ function AppContent() {
       <div className="noise-overlay" />
       <div className="scan-line" />
       <Particles />
-
       {/* Navigation - Hide for admin routes */}
       {!isAdminRoute && (
         <nav className="fixed top-0 left-0 right-0 z-50 nav-glass">
           <div className="max-w-7xl mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
-              <a href="/" className="flex items-center gap-3 group">
+              <Link to="/" className="flex items-center gap-3 group">
                 {/* Professional Logo */}
                 <div className="relative">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500 p-[2px]">
@@ -42,30 +41,28 @@ function AppContent() {
                   <div className="text-white font-bold text-lg group-hover:text-gradient transition-all">FutureForge<span className="text-cyan-400">.ai</span></div>
                   <div className="text-white/40 text-xs">Transform Your Career</div>
                 </div>
-              </a>
-
+              </Link>
               <div className="flex items-center gap-4">
-                {localStorage.getItem('courseUnlocked') === 'true' && (
-                  <a 
-                    href="/course" 
+                {courseUnlocked && (
+                  <Link 
+                    to="/course" 
                     className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white/70 hover:text-white hover:border-cyan-500/50 transition-all text-sm"
                   >
                     <span>📚</span>
                     My Course
-                  </a>
+                  </Link>
                 )}
-                <a 
-                  href="/home"
+                <Link 
+                  to="/home"
                   className="glow-btn px-5 py-2.5 rounded-lg text-white font-semibold text-sm"
                 >
                   Get Started
-                </a>
+                </Link>
               </div>
             </div>
           </div>
         </nav>
       )}
-
       {/* Content */}
       <main className={`relative z-10 ${!isAdminRoute ? 'pt-20' : ''}`}>
         <Routes>
@@ -82,7 +79,6 @@ function AppContent() {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
         </Routes>
       </main>
-
       {/* Footer - Hide for admin routes */}
       {!isAdminRoute && (
         <footer className="relative z-10 border-t border-white/5 mt-20">
@@ -105,18 +101,16 @@ function AppContent() {
                   India ka most advanced AI learning platform. 10,000+ students ne apni career transform ki hai. Ab aapki baari hai.
                 </p>
               </div>
-
               {/* Quick Links */}
               <div>
                 <h4 className="text-white font-semibold mb-4">Quick Links</h4>
                 <ul className="space-y-2 text-sm">
-                  <li><a href="/home" className="text-white/50 hover:text-cyan-400 transition-colors">Home</a></li>
-                  <li><a href="/career-goals" className="text-white/50 hover:text-cyan-400 transition-colors">Start Learning</a></li>
-                  <li><a href="/course" className="text-white/50 hover:text-cyan-400 transition-colors">My Course</a></li>
-                  <li><a href="/certificate" className="text-white/50 hover:text-cyan-400 transition-colors">Certificate</a></li>
+                  <li><Link to="/home" className="text-white/50 hover:text-cyan-400 transition-colors">Home</Link></li>
+                  <li><Link to="/career-goals" className="text-white/50 hover:text-cyan-400 transition-colors">Start Learning</Link></li>
+                  <li><Link to="/course" className="text-white/50 hover:text-cyan-400 transition-colors">My Course</Link></li>
+                  <li><Link to="/certificate" className="text-white/50 hover:text-cyan-400 transition-colors">Certificate</Link></li>
                 </ul>
               </div>
-
               {/* Contact */}
               <div>
                 <h4 className="text-white font-semibold mb-4">Contact</h4>
@@ -125,28 +119,26 @@ function AppContent() {
                   <li className="text-white/50">+91 XXXXX XXXXX</li>
                 </ul>
                 <div className="flex gap-3 mt-4">
-                  {['Twitter', 'LinkedIn', 'Instagram', 'YouTube'].map((social) => (
-                    <a 
-                      key={social}
-                      href="#"
-                      className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/50 hover:text-cyan-400 hover:bg-white/10 transition-all"
+                  {['T', 'L', 'I', 'Y'].map((letter, i) => (
+                    <span 
+                      key={i}
+                      className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/50 hover:text-cyan-400 hover:bg-white/10 transition-all cursor-pointer"
                     >
-                      <span className="text-xs">{social.charAt(0)}</span>
-                    </a>
+                      <span className="text-xs">{letter}</span>
+                    </span>
                   ))}
                 </div>
               </div>
             </div>
-
             {/* Bottom Bar */}
             <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="text-white/30 text-sm">
                 © 2025 FutureForge.ai. All rights reserved.
               </div>
               <div className="flex gap-6 text-sm">
-                <a href="#" className="text-white/30 hover:text-white/60 transition-colors">Privacy Policy</a>
-                <a href="#" className="text-white/30 hover:text-white/60 transition-colors">Terms of Service</a>
-                <a href="#" className="text-white/30 hover:text-white/60 transition-colors">Refund Policy</a>
+                <span className="text-white/30 hover:text-white/60 transition-colors cursor-pointer">Privacy Policy</span>
+                <span className="text-white/30 hover:text-white/60 transition-colors cursor-pointer">Terms of Service</span>
+                <span className="text-white/30 hover:text-white/60 transition-colors cursor-pointer">Refund Policy</span>
               </div>
             </div>
           </div>
@@ -155,7 +147,6 @@ function AppContent() {
     </div>
   );
 }
-
 export default function App() {
   return (
     <BrowserRouter>
